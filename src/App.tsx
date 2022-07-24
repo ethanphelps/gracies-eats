@@ -1,5 +1,13 @@
-import React from 'react';
+import React from "react";
+import { Landing } from "./pages/landing/landing";
 
-const App = () => <h1>Hello, World!</h1>;
+const App: React.FC = (): React.ReactElement => {
+  return (
+    <>
+      <h1>Hello, World!</h1>
+      <Landing />
+    </>
+  );
+};
 
 export default App;

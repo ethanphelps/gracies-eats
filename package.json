@@ -1,7 +1,7 @@
 {
-  "name": "react-ts-webpack",
+  "name": "gracies-eats",
   "version": "1.0.0",
-  "description": "A template for creating a Typescript React application using Webpack.",
+  "description": "A web app for cataloging and searching Grace's recipe repertoire for ideas on what to get at the grocery each week! Also just a cool way to display all the things she's made and what our favorites are!",
   "main": "index.ts",
   "scripts": {
     "build": "webpack --config webpack.prod.config.js",
