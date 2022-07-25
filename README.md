@@ -1,1 +1,1 @@
-A minimal template for creating a Typescript React application using Webpack. Create a new repository from this template to get up and running quickly!
+An application for my fiance to catalog her recipes and to help us figure out our options to choose from for the grocery store each week!
