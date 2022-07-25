@@ -7,12 +7,20 @@ module.exports = {
   },
   output: {
     path: path.join(__dirname, "/dist"),
+    // publicPath: "./",
     filename: "[name].js",
     clean: true
   },
   mode: "development",
+  cache: false,
   devServer: {
     port: 8080,
+    hot: true,
+    static: {
+      directory: path.join(__dirname, "public"), // get assets from here on reload
+    },
+    liveReload: true,
+    watchFiles: [ path.join(__dirname, 'src/**/*') ]
   },
   plugins: [
     new HtmlWebpackPlugin({
