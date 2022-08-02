@@ -10,7 +10,7 @@ $card-padding: 15px;
 // }
 
 // if box-sizing=content-box, then item-width must have padding and border-width manually added
-// or else items will not be centered properly because column will larger than item 
+// or else items will not be centered properly because column will larger than item
 @mixin responsive-centered-card-grid($item-width) {
   display: grid;
   grid-template-columns: repeat(
@@ -23,7 +23,7 @@ $card-padding: 15px;
 }
 
 .recipe-list {
-  @include responsive-centered-card-grid($card-width)
+  @include responsive-centered-card-grid($card-width);
 }
 
 .recipe-card {
@@ -36,6 +36,12 @@ $card-padding: 15px;
   color: colors.$dark-blue;
   background-color: colors.$light-blue;
   border-radius: 15px;
+  // box-shadow: 2px 3px 5px #dcdcdc93;
+  transition: box-shadow 0.2s;
+}
+.recipe-card:hover {
+  box-shadow: 2px 3px 5px #b7b7b793;
+  transition: box-shadow 0.2s;
 }
 
 .card-header-bar {
@@ -63,5 +69,35 @@ $card-padding: 15px;
     height: 100%;
     overflow: hidden;
     border-radius: 6px;
+  }
+}
+
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 10px 20px 10px 20px; // top right bottom left
+}
+
+#logo {
+  font-style: italic;
+  font-weight: 800;
+  font-size: 32px;
+}
+
+.header-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 8px;
+
+  svg {
+    stroke: colors.$icon-blue;
+    transition: stroke 0.7s;
+  }
+
+  svg:hover {
+    stroke: darken(colors.$icon-blue, 18%);
+    transition: stroke 0.4s;
+    cursor: pointer;
   }
 }

@@ -8,8 +8,8 @@ const App: React.FC = (): React.ReactElement => {
       <Route path="/landing">
         <Landing />
       </Route>
-      <Route path="/test">
-        <>this is a test</>
+      <Route path="/new">
+        <>this is the new recipe page</>
       </Route>
     </>
   );

@@ -1,7 +1,32 @@
 import React from "react";
 import "./landing.scss";
+import { Add, Search } from "../../inline-svgs";
 
 export const Landing: React.FC = (): React.ReactElement => {
+
+  interface IconButtonProps {
+    image: React.ReactElement;
+    path?: string;
+  }
+  const IconButton = ({image, path}: IconButtonProps): React.ReactElement => {
+    return (
+      <a className="icon-button" href={path}>
+        {image}
+      </a>
+    )
+  }
+
+  const Header = ({}): React.ReactElement => {
+    return (
+      <header className="header-container">
+        <div id="logo">Gracie's Eats</div>
+        <section className="header-buttons">
+          <IconButton image={<Search/>} />
+          <IconButton image={<Add/>} path="/new"/>
+        </section>
+      </header>
+    )
+  }
 
   interface RecipeCardProps {
     id?: number;
@@ -57,6 +82,7 @@ export const Landing: React.FC = (): React.ReactElement => {
 
   return (
     <div className="landing-container">
+      <Header />
       <div className="recipe-list">
         {/* <RecipeCard src="drunken_noodles.jpg" title="Drunken Noodles" time="1hr"/>
         <RecipeCard src="avocado_toast.jpeg" title="Avocado Toast" time="10 min"/>
