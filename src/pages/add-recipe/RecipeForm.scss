@@ -1,0 +1,19 @@
+
+#form-title {
+  font-style: italic;
+  font-weight: 600;
+  font-size: 32px;
+}
+
+.recipe-form-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 15px;
+}
+
+#form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
