@@ -25,6 +25,13 @@ $input-height: 37px;
   margin-bottom: $row-spacing;
   display: flex;
   gap: 15px;
+  align-items: flex-end;
+
+  // line up bullet point with middle of input
+  // could probably do this better with align-items: center
+  span {
+    margin-bottom: calc($input-height/5);
+  }
 }
 
 .form-label {

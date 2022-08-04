@@ -1,0 +1,11 @@
+.form-row {
+  display: flex;
+}
+.form-item {
+  flex: 1 1 auto; // distribute space evenly between children
+  // width: 100%; // expand to available space inside flex row
+}
+
+flex row with auto resizing children without overflow or wrap
+set flex grow and flex shrink to 1
+set flex basis to auto
