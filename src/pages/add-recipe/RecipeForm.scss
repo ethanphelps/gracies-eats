@@ -1,19 +1,51 @@
+@use "../../colors";
+
+$row-spacing: 8px;
+$side-padding: 35px;
 
 #form-title {
   font-style: italic;
   font-weight: 600;
   font-size: 32px;
+  text-align: center;
+  margin-bottom: 10px;
 }
 
-.recipe-form-container {
+#recipe-form {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 15px;
+  padding: 15px $side-padding 15px $side-padding;
+
 }
 
-#form {
+.form-row {
+  margin-top: $row-spacing;
+  margin-bottom: $row-spacing;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
+  gap: 15px;
+}
+
+.form-label {
+  font-size: 15px;
+  margin-left: 5px;
+  margin-bottom: 3px;
+}
+
+.form-input {
+  border: none;
+  padding: 10px 15px 10px 15px;
+  background-color: colors.$form-blue;
+  font-family: 'Playfair Display';
+  font-weight: 500;
+  width: 100%; // expand to form-item size
+}
+
+.form-input::placeholder {
+    color: colors.$form-gray;
+}
+
+.form-item {
+  flex: 1 1 auto; // distribute space evenly between children
+  // width: 100%; // expand to available space inside flex row
 }
