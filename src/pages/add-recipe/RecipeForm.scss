@@ -1,7 +1,8 @@
 @use "../../colors";
 
-$row-spacing: 8px;
+$row-spacing: 7px;
 $side-padding: 35px;
+$input-height: 37px;
 
 #form-title {
   font-style: italic;
@@ -39,10 +40,13 @@ $side-padding: 35px;
   font-family: 'Playfair Display';
   font-weight: 500;
   width: 100%; // expand to form-item size
+  // text-align: start;
+  height: $input-height;
+  resize: none;
 }
 
 .form-input::placeholder {
-    color: colors.$form-gray;
+  color: colors.$form-gray;
 }
 
 .form-item {
