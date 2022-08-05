@@ -17,7 +17,12 @@ $input-height: 37px;
   flex-direction: column;
   justify-content: center;
   padding: 15px $side-padding 15px $side-padding;
+}
 
+@media screen and (max-width: 330px) {
+  #recipe-form {
+    padding: 15px 10px 15px 10px;
+  }
 }
 
 .form-row {
@@ -45,18 +50,45 @@ $input-height: 37px;
   padding: 10px 15px 10px 15px;
   background-color: colors.$form-blue;
   font-family: 'Playfair Display';
-  font-weight: 500;
+  font-weight: 400;
   width: 100%; // expand to form-item size
   // text-align: start;
   height: $input-height;
   resize: none;
+  color: colors.$dark-blue;
 }
 
 .form-input::placeholder {
   color: colors.$form-gray;
+  font-weight: 500;
 }
 
 .form-item {
   flex: 1 1 auto; // distribute space evenly between children
+  min-width: 80px;
   // width: 100%; // expand to available space inside flex row
+}
+
+.new-button {
+  background-color: transparent;
+  border: none;
+  font-family: 'Playfair Display';
+  color: colors.$dark-blue;
+  font-size: 15px;
+  cursor: pointer;
+  display: flex;
+  gap: 15px;
+  margin-top: $row-spacing;
+}
+
+.form-list {
+  margin-top: $row-spacing;
+  margin-bottom: $row-spacing;
+}
+
+.form-list-row {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  margin-bottom: $row-spacing;
 }
