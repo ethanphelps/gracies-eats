@@ -10,6 +10,7 @@ interface FormInputProps {
   flexGrow?: number;
   flexShrink?: number;
   maxWidth?: string;
+  minWidth?: string;
 }
 const FormInput = ({
   title,
@@ -19,9 +20,11 @@ const FormInput = ({
   flexGrow = 1,
   flexShrink = 1,
   maxWidth = null,
+  minWidth = null,
 }: FormInputProps): React.ReactElement => {
   let inlineStyle: any = initialHeight ? { height: initialHeight } : {};
   inlineStyle.maxWidth = maxWidth;
+  inlineStyle.minWidth = minWidth;
 
   // display textarea or input based on multiLine prop
   const input = multiLine ? (
@@ -85,12 +88,24 @@ export const RecipeForm: React.FC = (): React.ReactElement => {
   const [ingredientList, setIngredientList] = useState<Ingredient[]>([
     { id: 0, name: "", quantity: 0 },
   ]);
+  const [instructionList, setInstructionList] = useState<InstructionStep[]>([
+    { id: 0, description: "", prePrep: false },
+  ]);
   const IngredientRow = () => {
     return (
       <section className="form-list-row">
         <span>◈</span>
         <FormInput placeholder="Quantity" flexShrink={2} />
         <FormInput placeholder="Name" flexGrow={12} />
+      </section>
+    );
+  };
+  const InstructionRow = () => {
+    return (
+      <section className="form-list-row">
+        <span>◈</span>
+        <FormInput placeholder="Step One" flexGrow={12} />
+        <FormInput placeholder="Pre-Prep?" maxWidth="100px" />
       </section>
     );
   };
@@ -136,6 +151,26 @@ export const RecipeForm: React.FC = (): React.ReactElement => {
           }}
         />
       </section>
+
+      <section className="form-list">
+        <h5 className="form-label">Instructions</h5>
+        {instructionList.map((step) => (
+          <InstructionRow key={step.id} />
+        ))}
+        <NewButton
+          callback={(ev) => {
+            ev.preventDefault(); // don't reload the page
+            console.log("new button clicked!");
+            // add new instruction to list
+            setInstructionList((instructions) => [
+              ...instructions,
+              { id: instructionList.length, description: "", prePrep: false },
+            ]);
+            console.log(instructionList);
+          }}
+        />
+      </section>
+
       {/* <section className="form-row">
         <span>◈</span>
         <FormInput placeholder="Quanity" />
