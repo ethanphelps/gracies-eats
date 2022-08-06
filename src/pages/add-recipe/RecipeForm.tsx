@@ -100,12 +100,13 @@ export const RecipeForm: React.FC = (): React.ReactElement => {
       </section>
     );
   };
-  const InstructionRow = () => {
+  const InstructionRow = ({id}: { id: number}) => {
+    const title = id === 1 ? 'Pre-Prep?' : null;
     return (
       <section className="form-list-row">
         <span>◈</span>
-        <FormInput placeholder="Step One" flexGrow={12} />
-        <FormInput placeholder="Pre-Prep?" maxWidth="100px" />
+        <FormInput placeholder={"Step " + id} flexGrow={1} />
+        <FormInput placeholder={null} maxWidth="90px" flexGrow={0}  title={title} />
       </section>
     );
   };
@@ -155,7 +156,7 @@ export const RecipeForm: React.FC = (): React.ReactElement => {
       <section className="form-list">
         <h5 className="form-label">Instructions</h5>
         {instructionList.map((step) => (
-          <InstructionRow key={step.id} />
+          <InstructionRow id={step.id + 1} key={step.id} />
         ))}
         <NewButton
           callback={(ev) => {
