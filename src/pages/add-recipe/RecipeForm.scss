@@ -136,20 +136,30 @@ input[type="checkbox"]:checked::before {
   visibility: hidden;
 }
 #cover-image-upload::before {
-  content: '+ Upload Image';
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  // content: '+ Upload Image';
+  // display: flex;
+  // justify-content: center;
+  // align-items: center;
+  // background-color: colors.$form-blue;
+  // @include form-text(colors.$form-gray);
+  // cursor: pointer;
+  // padding: 10px 15px 10px 15px;
+}
+#cover-image-upload {
+  // height: $input-height;
+  // width: 150px;
+  // overflow-y: hidden;
+  visibility: hidden;
+  width: 0;
+}
+.image-upload-container {
+  margin-top: $row-spacing;
+}
+
+#custom-file-button {
   background-color: colors.$form-blue;
   @include form-text(colors.$form-gray);
   cursor: pointer;
   padding: 10px 15px 10px 15px;
-}
-#cover-image-upload {
-  height: $input-height;
-  width: 150px;
-  // overflow-y: hidden;
-}
-.image-upload-container {
-  margin-top: $row-spacing;
+  border: none;
 }

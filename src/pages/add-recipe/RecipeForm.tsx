@@ -72,20 +72,54 @@ const NewButton = ({ callback }: NewButtonProps): React.ReactElement => {
 /**
  * Custom checkbox to match styling. Title should only be non-null if on the first row
  */
-const CheckBox = ({title}: {title: string}): React.ReactElement => {
+const CheckBox = ({ title }: { title: string }): React.ReactElement => {
   const label = title ? <h5 className="form-label">{title}</h5> : null;
-  const input = <input type="checkbox" className="pre-prep"></input>
+  const input = <input type="checkbox" className="pre-prep"></input>;
   return (
     <div className="checkbox">
       {label}
       {input}
     </div>
-  )
-}
+  );
+};
 
-const fileChosen = (event: React.ChangeEvent<HTMLInputElement>) => {
-  const fileName = event.target.value.split('\\').at(-1);
-  console.log(fileName)
+/**
+ * Custom File Input component that overrides the difficult-to-style input type="file" element.
+ * This is achieved by setting the default input element's visibility to hidden and width to zero
+ * and then creating a custom button whose click handler programmatically clicks the input element.
+ * The file name is displayed using an onChange handler on the input element that sets the button's
+ * text to name of the chosen file. 
+ */
+const FileInput = ({text}: {text: string}): React.ReactElement => {
+  const ref = useRef(null);
+  const [buttonText, setButtonText] = useState(text);
+  const click = (event: React.MouseEvent) => {
+    event.preventDefault();
+    ref.current.click(); // click the file input
+    console.log(event.target)
+  }
+  const fileChosen = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const fileName = event.target.value.split("\\").at(-1);
+    console.log(fileName);
+    setButtonText(fileName);
+  };
+  return (
+    <section className="image-upload-container">
+      <h5 className="form-label">Cover Image</h5>
+      <input
+        type="file"
+        ref={ref}
+        id="cover-image-upload"
+        onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+          fileChosen(event)
+        }
+      ></input>
+      {/* <input type="file"></input> */}
+      <button id="custom-file-button" onClick={click}>{buttonText}</button>
+    </section>
+  )
 }
 
 interface Ingredient {
@@ -104,7 +138,6 @@ export const RecipeForm: React.FC = (): React.ReactElement => {
   // const ingredientList: Ingredient[] = [
   //   { id: 0, name: '', quantity: 0 }
   // ]
-  const ref = useRef(null);
   const [ingredientList, setIngredientList] = useState<Ingredient[]>([
     { id: 0, name: "", quantity: 0 },
   ]);
@@ -120,8 +153,8 @@ export const RecipeForm: React.FC = (): React.ReactElement => {
       </section>
     );
   };
-  const InstructionRow = ({id}: { id: number}) => {
-    const title = id === 1 ? 'Pre-Prep?' : null;
+  const InstructionRow = ({ id }: { id: number }) => {
+    const title = id === 1 ? "Pre-Prep?" : null;
     return (
       <section className="form-list-row">
         <span>◈</span>
@@ -133,7 +166,6 @@ export const RecipeForm: React.FC = (): React.ReactElement => {
   };
 
   return (
-    // <div className="recipe-form-container">
     <form id="recipe-form">
       <header id="form-title">Create a New Recipe</header>
       <section className="form-row">
@@ -192,11 +224,8 @@ export const RecipeForm: React.FC = (): React.ReactElement => {
           }}
         />
       </section>
-      <section className="image-upload-container">
-        <h5 className="form-label">Cover Image</h5>
-        <input type="file" ref={ref} id="cover-image-upload" onChange={fileChosen}></input>
-      </section>
+
+      <FileInput text="+ Upload Image"/>
     </form>
-    // </div>
   );
 };
