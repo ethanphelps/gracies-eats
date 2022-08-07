@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import "./RecipeForm.scss";
 import { IconButton } from "../landing/landing";
 
@@ -69,6 +69,25 @@ const NewButton = ({ callback }: NewButtonProps): React.ReactElement => {
   );
 };
 
+/**
+ * Custom checkbox to match styling. Title should only be non-null if on the first row
+ */
+const CheckBox = ({title}: {title: string}): React.ReactElement => {
+  const label = title ? <h5 className="form-label">{title}</h5> : null;
+  const input = <input type="checkbox" className="pre-prep"></input>
+  return (
+    <div className="checkbox">
+      {label}
+      {input}
+    </div>
+  )
+}
+
+const fileChosen = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const fileName = event.target.value.split('\\').at(-1);
+  console.log(fileName)
+}
+
 interface Ingredient {
   id: number;
   name: string;
@@ -85,6 +104,7 @@ export const RecipeForm: React.FC = (): React.ReactElement => {
   // const ingredientList: Ingredient[] = [
   //   { id: 0, name: '', quantity: 0 }
   // ]
+  const ref = useRef(null);
   const [ingredientList, setIngredientList] = useState<Ingredient[]>([
     { id: 0, name: "", quantity: 0 },
   ]);
@@ -106,7 +126,8 @@ export const RecipeForm: React.FC = (): React.ReactElement => {
       <section className="form-list-row">
         <span>◈</span>
         <FormInput placeholder={"Step " + id} flexGrow={1} />
-        <FormInput placeholder={null} maxWidth="90px" flexGrow={0}  title={title} />
+        {/* <FormInput placeholder={null} maxWidth="90px" flexGrow={0}  title={title} /> */}
+        <CheckBox title={title} />
       </section>
     );
   };
@@ -171,13 +192,10 @@ export const RecipeForm: React.FC = (): React.ReactElement => {
           }}
         />
       </section>
-
-      {/* <section className="form-row">
-        <span>◈</span>
-        <FormInput placeholder="Quanity" />
-        <FormInput placeholder="Name" />
-      </section> */}
-      <section className="form-row"></section>
+      <section className="image-upload-container">
+        <h5 className="form-label">Cover Image</h5>
+        <input type="file" ref={ref} id="cover-image-upload" onChange={fileChosen}></input>
+      </section>
     </form>
     // </div>
   );

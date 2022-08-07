@@ -4,6 +4,12 @@ $row-spacing: 7px;
 $side-padding: 35px;
 $input-height: 37px;
 
+@mixin form-text($font-color) {
+  font-family: 'Playfair Display';
+  font-weight: 500;
+  color: $font-color;
+}
+
 #form-title {
   font-style: italic;
   font-weight: 600;
@@ -59,8 +65,7 @@ $input-height: 37px;
 }
 
 .form-input::placeholder {
-  color: colors.$form-gray;
-  font-weight: 500;
+  @include form-text(colors.$form-gray);
 }
 
 .form-item {
@@ -97,4 +102,54 @@ $input-height: 37px;
     top: -23px;
     white-space: nowrap;
    }
+}
+
+input[type="checkbox"] {
+  appearance: none;
+  display: grid;
+  place-content: center;
+  font: inherit;
+  color: colors.$form-blue;
+  width: $input-height;
+  height: $input-height;
+  border: 0.15em solid currentColor;
+  border-radius: 0.15em;
+  transform: translateY(-0.075em);
+}
+input[type="checkbox"]::before {
+  content: "";
+  width: 1.35em;
+  height: 1.35em;
+  transform: scale(0);
+  transition: 100ms transform ease-in-out;
+  box-shadow: inset 1.55em 1.55em colors.$form-blue;
+}
+input[type="checkbox"]:checked::before {
+  transform: scale(1);
+}
+.checkbox {
+  display: flex;
+  justify-content: center;
+}
+
+#cover-image-upload::file-selector-button {
+  visibility: hidden;
+}
+#cover-image-upload::before {
+  content: '+ Upload Image';
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: colors.$form-blue;
+  @include form-text(colors.$form-gray);
+  cursor: pointer;
+  padding: 10px 15px 10px 15px;
+}
+#cover-image-upload {
+  height: $input-height;
+  width: 150px;
+  // overflow-y: hidden;
+}
+.image-upload-container {
+  margin-top: $row-spacing;
 }
