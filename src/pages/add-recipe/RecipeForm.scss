@@ -3,11 +3,27 @@
 $row-spacing: 7px;
 $side-padding: 35px;
 $input-height: 37px;
+$submit-border-width: 3px;
 
 @mixin form-text($font-color) {
   font-family: 'Playfair Display';
   font-weight: 500;
   color: $font-color;
+}
+
+@mixin button-style() {
+  border: none;
+  font-family: 'Playfair Display';
+  font-size: 15px;
+  cursor: pointer;
+  color: colors.$dark-blue;
+}
+
+@mixin submit-transitions($time) {
+  // transition: border-color $time;
+  // transition: background-color $time;
+  // transition: color $time;
+  transition: all $time;
 }
 
 #form-title {
@@ -62,6 +78,13 @@ $input-height: 37px;
   height: $input-height;
   resize: none;
   color: colors.$dark-blue;
+  border: 3px solid colors.$form-blue;
+  @include submit-transitions(0.2s);
+}
+.form-input:hover, .form-input:focus {
+  border: 3px solid colors.$pink;
+  outline: none;
+  @include submit-transitions(0.2s);
 }
 
 .form-input::placeholder {
@@ -133,7 +156,7 @@ input[type="checkbox"]:checked::before {
 }
 
 #cover-image-upload::file-selector-button {
-  visibility: hidden;
+  // visibility: hidden;
 }
 #cover-image-upload::before {
   // content: '+ Upload Image';
@@ -152,9 +175,9 @@ input[type="checkbox"]:checked::before {
   visibility: hidden;
   width: 0;
 }
-.image-upload-container {
-  margin-top: $row-spacing;
-}
+// .image-upload-container {
+//   margin-top: $row-spacing;
+// }
 
 #custom-file-button {
   background-color: colors.$form-blue;
@@ -162,4 +185,37 @@ input[type="checkbox"]:checked::before {
   cursor: pointer;
   padding: 10px 15px 10px 15px;
   border: none;
+}
+
+#recipe-submit {
+  @include button-style();
+  padding: 3px 10px 5px 10px;
+  font-size: 28px;
+  font-weight: 600;
+  font-style: italic;
+  border-radius: 3px;
+  background-color: colors.$form-blue;
+  // background-color: transparent;
+  color: colors.$dark-blue;
+  // color: colors.$form-blue;
+  // color: colors.$light-pink;
+  border: $submit-border-width solid colors.$form-blue;
+  border: $submit-border-width solid colors.$dark-blue;
+  border: $submit-border-width solid colors.$bg-blue;
+  border: $submit-border-width solid transparent;
+  // border: $submit-border-width solid colors.$light-pink;
+  @include submit-transitions(0.3s);
+}
+#recipe-submit:hover {
+  border: $submit-border-width solid colors.$light-pink;
+  background-color: transparent;
+  color: colors.$light-pink;
+  @include submit-transitions(0.3s);
+}
+
+#submit-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
 }

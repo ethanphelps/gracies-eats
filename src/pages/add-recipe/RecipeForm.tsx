@@ -102,22 +102,22 @@ const FileInput = ({text}: {text: string}): React.ReactElement => {
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     const fileName = event.target.value.split("\\").at(-1);
-    console.log(fileName);
     setButtonText(fileName);
   };
   return (
-    <section className="image-upload-container">
-      <h5 className="form-label">Cover Image</h5>
-      <input
-        type="file"
-        ref={ref}
-        id="cover-image-upload"
-        onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-          fileChosen(event)
-        }
-      ></input>
-      {/* <input type="file"></input> */}
-      <button id="custom-file-button" onClick={click}>{buttonText}</button>
+    <section className="form-row">
+      <div className="form-item">
+        <h5 className="form-label">Cover Image</h5>
+        <input
+          type="file"
+          ref={ref}
+          id="cover-image-upload"
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+            fileChosen(event)
+          }
+        ></input>
+        <button id="custom-file-button" onClick={click}>{buttonText}</button>
+      </div>
     </section>
   )
 }
@@ -134,10 +134,6 @@ interface InstructionStep {
 }
 
 export const RecipeForm: React.FC = (): React.ReactElement => {
-  // add ingredient components here whenever new button pressed
-  // const ingredientList: Ingredient[] = [
-  //   { id: 0, name: '', quantity: 0 }
-  // ]
   const [ingredientList, setIngredientList] = useState<Ingredient[]>([
     { id: 0, name: "", quantity: 0 },
   ]);
@@ -159,7 +155,6 @@ export const RecipeForm: React.FC = (): React.ReactElement => {
       <section className="form-list-row">
         <span>◈</span>
         <FormInput placeholder={"Step " + id} flexGrow={1} />
-        {/* <FormInput placeholder={null} maxWidth="90px" flexGrow={0}  title={title} /> */}
         <CheckBox title={title} />
       </section>
     );
@@ -220,12 +215,15 @@ export const RecipeForm: React.FC = (): React.ReactElement => {
               ...instructions,
               { id: instructionList.length, description: "", prePrep: false },
             ]);
-            console.log(instructionList);
           }}
         />
       </section>
 
       <FileInput text="+ Upload Image"/>
+
+      <section className="form-row" id="submit-row">
+        <button id="recipe-submit">Create</button>
+      </section>
     </form>
   );
 };
