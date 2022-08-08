@@ -11,6 +11,7 @@ interface FormInputProps {
   flexShrink?: number;
   maxWidth?: string;
   minWidth?: string;
+  setState: React.ChangeEventHandler;
 }
 const FormInput = ({
   title,
@@ -21,10 +22,15 @@ const FormInput = ({
   flexShrink = 1,
   maxWidth = null,
   minWidth = null,
+  setState,
 }: FormInputProps): React.ReactElement => {
   let inlineStyle: any = initialHeight ? { height: initialHeight } : {};
   inlineStyle.maxWidth = maxWidth;
   inlineStyle.minWidth = minWidth;
+
+  // const changeHandler = (event: React.ChangeEvent) => {
+  //   setState((event.target as HTMLInputElement).value);
+  // };
 
   // display textarea or input based on multiLine prop
   const input = multiLine ? (
@@ -32,12 +38,14 @@ const FormInput = ({
       className="form-input"
       placeholder={placeholder}
       style={inlineStyle}
+      onChange={setState}
     ></textarea>
   ) : (
     <input
       className="form-input"
       style={inlineStyle}
       placeholder={placeholder}
+      onChange={setState}
     ></input>
   );
   // conditionally display label if title provided
@@ -72,9 +80,39 @@ const NewButton = ({ callback }: NewButtonProps): React.ReactElement => {
 /**
  * Custom checkbox to match styling. Title should only be non-null if on the first row
  */
-const CheckBox = ({ title }: { title: string }): React.ReactElement => {
+const CheckBox = ({
+  title,
+  id,
+  state,
+  setState,
+}: {
+  title: string;
+  id: number;
+  state: InstructionStep[]
+  setState: React.Dispatch<React.SetStateAction<InstructionStep[]>>;
+}): React.ReactElement => {
+  const ref = useRef(null);
   const label = title ? <h5 className="form-label">{title}</h5> : null;
-  const input = <input type="checkbox" className="pre-prep"></input>;
+  const input = (
+    <input
+      type="checkbox"
+      className="pre-prep"
+      onChange={(event: React.ChangeEvent) =>
+        setState((instructions) =>
+          instructions.map((instruction) =>
+            instruction.id == id
+              ? {
+                  id: id,
+                  description: state[id].description,
+                  prePrep: ref.current.checked,
+                }
+              : instruction
+          )
+        )
+      }
+      ref={ref}
+    ></input>
+  );
   return (
     <div className="checkbox">
       {label}
@@ -88,19 +126,17 @@ const CheckBox = ({ title }: { title: string }): React.ReactElement => {
  * This is achieved by setting the default input element's visibility to hidden and width to zero
  * and then creating a custom button whose click handler programmatically clicks the input element.
  * The file name is displayed using an onChange handler on the input element that sets the button's
- * text to name of the chosen file. 
+ * text to name of the chosen file.
  */
-const FileInput = ({text}: {text: string}): React.ReactElement => {
+const FileInput = ({ text }: { text: string }): React.ReactElement => {
   const ref = useRef(null);
   const [buttonText, setButtonText] = useState(text);
   const click = (event: React.MouseEvent) => {
     event.preventDefault();
     ref.current.click(); // click the file input
-    console.log(event.target)
-  }
-  const fileChosen = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
+    console.log(event.target);
+  };
+  const fileChosen = (event: React.ChangeEvent<HTMLInputElement>) => {
     const fileName = event.target.value.split("\\").at(-1);
     setButtonText(fileName);
   };
@@ -116,11 +152,13 @@ const FileInput = ({text}: {text: string}): React.ReactElement => {
             fileChosen(event)
           }
         ></input>
-        <button id="custom-file-button" onClick={click}>{buttonText}</button>
+        <button id="custom-file-button" onClick={click}>
+          {buttonText}
+        </button>
       </div>
     </section>
-  )
-}
+  );
+};
 
 interface Ingredient {
   id: number;
@@ -140,35 +178,125 @@ export const RecipeForm: React.FC = (): React.ReactElement => {
   const [instructionList, setInstructionList] = useState<InstructionStep[]>([
     { id: 0, description: "", prePrep: false },
   ]);
-  const IngredientRow = () => {
+  const [name, setName] = useState("");
+  const [prepTime, setPrepTime] = useState("");
+  const [cookTime, setCookTime] = useState("");
+  const [description, setDescription] = useState("");
+  const [serves, setServes] = useState(0);
+  const [coverImage, setCoverImage] = useState("");
+
+  const IngredientRow = ({ id }: { id: number }) => {
     return (
       <section className="form-list-row">
         <span>◈</span>
-        <FormInput placeholder="Quantity" flexShrink={2} />
-        <FormInput placeholder="Name" flexGrow={12} />
+        <FormInput
+          placeholder="Quantity"
+          flexShrink={2}
+          setState={(event: React.ChangeEvent) =>
+            setIngredientList((ingredients) =>
+              ingredients.map((ingredient) =>
+                ingredient.id == id
+                  ? {
+                      id: id,
+                      name: ingredientList[id].name,
+                      quantity: Number(
+                        (event.target as HTMLInputElement).value
+                      ),
+                    }
+                  : ingredient
+              )
+            )
+          }
+        />
+        <FormInput
+          placeholder="Name"
+          flexGrow={12}
+          setState={(event: React.ChangeEvent) =>
+            setIngredientList((ingredients) =>
+              ingredients.map((ingredient) =>
+                ingredient.id == id
+                  ? {
+                      id: id,
+                      name: (event.target as HTMLInputElement).value,
+                      quantity: ingredientList[id].quantity,
+                    }
+                  : ingredient
+              )
+            )
+          }
+        />
       </section>
     );
   };
   const InstructionRow = ({ id }: { id: number }) => {
-    const title = id === 1 ? "Pre-Prep?" : null;
+    const title = id === 0 ? "Pre-Prep?" : null;
     return (
       <section className="form-list-row">
         <span>◈</span>
-        <FormInput placeholder={"Step " + id} flexGrow={1} />
-        <CheckBox title={title} />
+        <FormInput
+          placeholder={"Step " + (id + 1)}
+          flexGrow={1}
+          setState={(event: React.ChangeEvent) =>
+            setInstructionList((instructions) =>
+              instructions.map((instruction) =>
+                instruction.id == id
+                  ? {
+                      id: id,
+                      description: (event.target as HTMLInputElement).value,
+                      prePrep: instructionList[id].prePrep,
+                    }
+                  : instruction
+              )
+            )
+          }
+        />
+        <CheckBox title={title} id={id} state={instructionList} setState={setInstructionList} />
       </section>
     );
+  };
+  const submitRecipe = (event: React.MouseEvent) => {
+    event.preventDefault();
+    // console.log(event);
+    const recipe = {
+      name: name,
+      prepTime: prepTime,
+      cookTime: cookTime,
+      description: description,
+      serves: serves,
+      ingredients: ingredientList,
+      instructions: instructionList,
+      coverImage,
+    };
+    console.log(recipe);
   };
 
   return (
     <form id="recipe-form">
       <header id="form-title">Create a New Recipe</header>
       <section className="form-row">
-        <FormInput title="Title" placeholder="My Delicious Recipe" />
+        <FormInput
+          title="Title"
+          placeholder="My Delicious Recipe"
+          setState={(event: React.ChangeEvent) =>
+            setName((event.target as HTMLInputElement).value)
+          }
+        />
       </section>
       <section className="form-row">
-        <FormInput title="Prep Time" placeholder="About 30 min" />
-        <FormInput title="Cook Time" placeholder="About 45 min" />
+        <FormInput
+          title="Prep Time"
+          placeholder="About 30 min"
+          setState={(event: React.ChangeEvent) =>
+            setPrepTime((event.target as HTMLInputElement).value)
+          }
+        />
+        <FormInput
+          title="Cook Time"
+          placeholder="About 45 min"
+          setState={(event: React.ChangeEvent) =>
+            setCookTime((event.target as HTMLInputElement).value)
+          }
+        />
       </section>
       <section className="form-row">
         <FormInput
@@ -176,16 +304,25 @@ export const RecipeForm: React.FC = (): React.ReactElement => {
           placeholder="A short, gustatory description in case you forget what the recipe is like!"
           multiLine={true}
           initialHeight="100px"
+          setState={(event: React.ChangeEvent) =>
+            setDescription((event.target as HTMLInputElement).value)
+          }
         />
       </section>
       <section className="form-row">
-        <FormInput title="Serves" placeholder="2 people" />
+        <FormInput
+          title="Serves"
+          placeholder="2 people"
+          setState={(event: React.ChangeEvent) =>
+            setServes(Number((event.target as HTMLInputElement).value))
+          }
+        />
       </section>
 
       <section className="form-list">
         <h5 className="form-label">Ingredients</h5>
         {ingredientList.map((ingredient) => (
-          <IngredientRow key={ingredient.id} />
+          <IngredientRow id={ingredient.id} key={ingredient.id} />
         ))}
         <NewButton
           callback={(ev) => {
@@ -204,7 +341,7 @@ export const RecipeForm: React.FC = (): React.ReactElement => {
       <section className="form-list">
         <h5 className="form-label">Instructions</h5>
         {instructionList.map((step) => (
-          <InstructionRow id={step.id + 1} key={step.id} />
+          <InstructionRow id={step.id} key={step.id} />
         ))}
         <NewButton
           callback={(ev) => {
@@ -219,10 +356,12 @@ export const RecipeForm: React.FC = (): React.ReactElement => {
         />
       </section>
 
-      <FileInput text="+ Upload Image"/>
+      <FileInput text="+ Upload Image" />
 
       <section className="form-row" id="submit-row">
-        <button id="recipe-submit">Create</button>
+        <button id="recipe-submit" onClick={submitRecipe}>
+          Create
+        </button>
       </section>
     </form>
   );
