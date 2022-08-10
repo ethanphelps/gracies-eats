@@ -88,7 +88,7 @@ const CheckBox = ({
 }: {
   title: string;
   id: number;
-  state: InstructionStep[]
+  state: InstructionStep[];
   setState: React.Dispatch<React.SetStateAction<InstructionStep[]>>;
 }): React.ReactElement => {
   const ref = useRef(null);
@@ -171,6 +171,104 @@ interface InstructionStep {
   prePrep: boolean;
 }
 
+/**
+ * Ingredient Row component for rendering list of ingredients in new recipe form. Can't be declared inside of 
+ * the RecipeForm component setting the state of the ingredient list triggers a rerender of the entire form
+ * component which de-focuses the ingredient row input every time a key is typed.
+ */
+const IngredientRow = ({
+  id,
+  setState,
+}: {
+  id: number;
+  setState: React.Dispatch<React.SetStateAction<Ingredient[]>>;
+}) => {
+  return (
+    <section className="form-list-row">
+      <span>◈</span>
+      <FormInput
+        placeholder="Quantity"
+        flexShrink={2}
+        setState={(event: React.ChangeEvent) =>
+          setState((ingredients: Ingredient[]) =>
+            ingredients.map((ingredient) =>
+              ingredient.id == id
+                ? {
+                    id: id,
+                    name: ingredient.name,
+                    quantity: Number((event.target as HTMLInputElement).value),
+                  }
+                : ingredient
+            )
+          )
+        }
+      />
+      <FormInput
+        placeholder="Name"
+        flexGrow={12}
+        setState={(event: React.ChangeEvent) =>
+          setState((ingredients) =>
+            ingredients.map((ingredient) =>
+              ingredient.id == id
+                ? {
+                    id: id,
+                    name: (event.target as HTMLInputElement).value,
+                    quantity: ingredient.quantity,
+                  }
+                : ingredient
+            )
+          )
+        }
+      />
+    </section>
+  );
+};
+
+/**
+ * Instruction Row component for rendering list of instructions in new recipe form. Can't be declared inside of 
+ * the RecipeForm component setting the state of the instruction list triggers a rerender of the entire form
+ * component which de-focuses the instruction row input every time a key is typed.
+ */
+const InstructionRow = ({
+  id,
+  setState,
+  instructionList,
+}: {
+  id: number;
+  setState: React.Dispatch<React.SetStateAction<InstructionStep[]>>;
+  instructionList: InstructionStep[];
+}) => {
+  const title = id === 0 ? "Pre-Prep?" : null;
+  return (
+    <section className="form-list-row">
+      <span>◈</span>
+      <FormInput
+        placeholder={"Step " + (id + 1)}
+        flexGrow={1}
+        setState={(event: React.ChangeEvent) =>
+          setState((instructions) =>
+            instructions.map((instruction) =>
+              instruction.id == id
+                ? {
+                    id: id,
+                    description: (event.target as HTMLInputElement).value,
+                    prePrep: instruction.prePrep,
+                  }
+                : instruction
+            )
+          )
+        }
+      />
+      <CheckBox
+        title={title}
+        id={id}
+        state={instructionList}
+        setState={setState}
+      />
+    </section>
+  );
+};
+
 export const RecipeForm: React.FC = (): React.ReactElement => {
   const [ingredientList, setIngredientList] = useState<Ingredient[]>([
     { id: 0, name: "", quantity: 0 },
@@ -185,75 +283,6 @@ export const RecipeForm: React.FC = (): React.ReactElement => {
   const [serves, setServes] = useState(0);
   const [coverImage, setCoverImage] = useState("");
 
-  const IngredientRow = ({ id }: { id: number }) => {
-    return (
-      <section className="form-list-row">
-        <span>◈</span>
-        <FormInput
-          placeholder="Quantity"
-          flexShrink={2}
-          setState={(event: React.ChangeEvent) =>
-            setIngredientList((ingredients) =>
-              ingredients.map((ingredient) =>
-                ingredient.id == id
-                  ? {
-                      id: id,
-                      name: ingredientList[id].name,
-                      quantity: Number(
-                        (event.target as HTMLInputElement).value
-                      ),
-                    }
-                  : ingredient
-              )
-            )
-          }
-        />
-        <FormInput
-          placeholder="Name"
-          flexGrow={12}
-          setState={(event: React.ChangeEvent) =>
-            setIngredientList((ingredients) =>
-              ingredients.map((ingredient) =>
-                ingredient.id == id
-                  ? {
-                      id: id,
-                      name: (event.target as HTMLInputElement).value,
-                      quantity: ingredientList[id].quantity,
-                    }
-                  : ingredient
-              )
-            )
-          }
-        />
-      </section>
-    );
-  };
-  const InstructionRow = ({ id }: { id: number }) => {
-    const title = id === 0 ? "Pre-Prep?" : null;
-    return (
-      <section className="form-list-row">
-        <span>◈</span>
-        <FormInput
-          placeholder={"Step " + (id + 1)}
-          flexGrow={1}
-          setState={(event: React.ChangeEvent) =>
-            setInstructionList((instructions) =>
-              instructions.map((instruction) =>
-                instruction.id == id
-                  ? {
-                      id: id,
-                      description: (event.target as HTMLInputElement).value,
-                      prePrep: instructionList[id].prePrep,
-                    }
-                  : instruction
-              )
-            )
-          }
-        />
-        <CheckBox title={title} id={id} state={instructionList} setState={setInstructionList} />
-      </section>
-    );
-  };
   const submitRecipe = (event: React.MouseEvent) => {
     event.preventDefault();
     // console.log(event);
@@ -322,7 +351,11 @@ export const RecipeForm: React.FC = (): React.ReactElement => {
       <section className="form-list">
         <h5 className="form-label">Ingredients</h5>
         {ingredientList.map((ingredient) => (
-          <IngredientRow id={ingredient.id} key={ingredient.id} />
+          <IngredientRow
+            id={ingredient.id}
+            key={ingredient.id}
+            setState={setIngredientList}
+          />
         ))}
         <NewButton
           callback={(ev) => {
@@ -341,7 +374,12 @@ export const RecipeForm: React.FC = (): React.ReactElement => {
       <section className="form-list">
         <h5 className="form-label">Instructions</h5>
         {instructionList.map((step) => (
-          <InstructionRow id={step.id} key={step.id} />
+          <InstructionRow
+            id={step.id}
+            key={step.id}
+            setState={setInstructionList}
+            instructionList={instructionList}
+          />
         ))}
         <NewButton
           callback={(ev) => {

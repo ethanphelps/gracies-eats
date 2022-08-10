@@ -6,7 +6,7 @@ import Route from "./components/Route";
 const App: React.FC = (): React.ReactElement => {
   return (
     <>
-      <Route path="/landing">
+      <Route path="/">
         <Landing />
       </Route>
       <Route path="/new">
