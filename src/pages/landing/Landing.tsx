@@ -40,7 +40,8 @@ const RecipeCard = ({
   time,
 }: RecipeCardProps): React.ReactElement => {
   return (
-    <Link href={`recipe/${id.toString()}/edit/${Math.floor(Math.random()*100).toString()}`}>
+    // <Link href={`recipe/${id.toString()}/edit/${Math.floor(Math.random()*100).toString()}`}>
+    <Link href={`recipe/${id.toString()}`}>
       <article className="recipe-card">
         <header className="card-header-bar">
           <h3 className="title">{title}</h3>
