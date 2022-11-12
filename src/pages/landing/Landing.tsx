@@ -1,6 +1,7 @@
 import React from "react";
 import "./landing.scss";
 import { Add, Search } from "../../inline-svgs";
+import Link from "../../components/Link";
 
 interface IconButtonProps {
   image: React.ReactElement;
@@ -33,20 +34,23 @@ interface RecipeCardProps {
   time: string;
 }
 const RecipeCard = ({
+  id,
   src,
   title,
   time,
 }: RecipeCardProps): React.ReactElement => {
   return (
-    <article className="recipe-card">
-      <header className="card-header-bar">
-        <h3 className="title">{title}</h3>
-        <h4 className="time">{time}</h4>
-      </header>
-      <main className="card-body">
-        <img src={src} />
-      </main>
-    </article>
+    <Link href={`recipe/${id.toString()}/edit/${Math.floor(Math.random()*100).toString()}`}>
+      <article className="recipe-card">
+        <header className="card-header-bar">
+          <h3 className="title">{title}</h3>
+          <h4 className="time">{time}</h4>
+        </header>
+        <main className="card-body">
+          <img src={src} />
+        </main>
+      </article>
+    </Link>
   );
 };
 
@@ -66,13 +70,13 @@ export const Landing: React.FC = (): React.ReactElement => {
       time: "10 min",
     },
     {
-      id: 3,
+      id: 2,
       src: "kale_salad.jpg",
       title: "Kale Salad",
       time: "25 min",
     },
     {
-      id: 4,
+      id: 3,
       src: "kale_salad.jpg",
       title: "Kale Salad",
       time: "25 min",
@@ -86,6 +90,7 @@ export const Landing: React.FC = (): React.ReactElement => {
         {data.map((recipe) => (
           <RecipeCard
             key={recipe.id}
+            id={recipe.id}
             src={recipe.src}
             title={recipe.title}
             time={recipe.time}
