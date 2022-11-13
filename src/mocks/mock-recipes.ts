@@ -1,27 +1,8 @@
-interface Ingredient {
-    id: number;
-    name: string;
-    quantity: number;
-}
-interface InstructionStep {
-    id: number;
-    description: string;
-    prePrep: boolean;
-  }
-interface Recipe {
-    id: string;
-    title: string;
-    prepTime: string;
-    cookTime: string;
-    description: string;
-    serves: number;
-    ingredients: Ingredient[];
-    instructions: InstructionStep[];
-}
+import { Recipe } from "../models/models";
 
-const recipes: Recipe[] = [
+export const recipes: Recipe[] = [
     {
-        id: 'abcxyz',
+        id: '0',
         title: 'Drunken Noodles',
         prepTime: '15 min',
         cookTime: '30 min',
@@ -35,6 +16,26 @@ const recipes: Recipe[] = [
         instructions: [
             { id: 0, description: 'preheat oven', prePrep: true },
             { id: 1, description: 'stir veggies in the wok', prePrep: false },
+        ]
+    },
+    {
+        id: '1',
+        title: 'Brussel Sprout Nourish Bowls',
+        prepTime: '10 min',
+        cookTime: '30 min',
+        description: 'Delicious bowls full of brussel sprouts, cauliflower, hot honey and other yummy ingredients.',
+        serves: 2,
+        ingredients: [
+            { id: 0, name: 'brussel sprouts', quantity: 3},
+            { id: 1, name: 'cauliflower', quantity: 5},
+            { id: 2, name: 'rice', quantity: 1},
+            { id: 3, name: 'turmeric', quantity: 1},
+        ],
+        instructions: [
+            { id: 0, description: 'preheat oven', prePrep: true },
+            { id: 1, description: 'start rice cooker', prePrep: true },
+            { id: 2, description: 'cut brussel sprouts', prePrep: false },
+            { id: 3, description: 'cook brussel sprouts in air fryer', prePrep: false },
         ]
     }
 ]

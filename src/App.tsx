@@ -1,7 +1,7 @@
 import React from "react";
 import { Landing } from "./pages/landing/landing";
 import { RecipeForm } from "./pages/add-recipe/RecipeForm";
-import { Recipe } from "./pages/recipe/RecipeView";
+import { RecipeView } from "./pages/recipe/RecipeView";
 import Route from "./components/Route";
 
 const App: React.FC = (): React.ReactElement => {
@@ -14,10 +14,10 @@ const App: React.FC = (): React.ReactElement => {
                 <RecipeForm />
             </Route>
             <Route path="/recipe/:recipeId">
-                <Recipe />
+                <RecipeView />
             </Route>
             <Route path="/recipe/:recipeId/edit/:editParam">
-                <Recipe />
+                <RecipeView />
             </Route>
         </>
     );

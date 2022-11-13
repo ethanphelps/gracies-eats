@@ -1,6 +1,7 @@
 import React, { useState, useRef } from "react";
 import "./RecipeForm.scss";
 import { IconButton } from "../landing/landing";
+import { Ingredient, InstructionStep } from "../../models/models";
 
 interface FormInputProps {
   title?: string;
@@ -160,23 +161,13 @@ const FileInput = ({ text }: { text: string }): React.ReactElement => {
   );
 };
 
-interface Ingredient {
-  id: number;
-  name: string;
-  quantity: number;
-}
-interface InstructionStep {
-  id: number;
-  description: string;
-  prePrep: boolean;
-}
 
 /**
  * Ingredient Row component for rendering list of ingredients in new recipe form. Can't be declared inside of 
  * the RecipeForm component setting the state of the ingredient list triggers a rerender of the entire form
  * component which de-focuses the ingredient row input every time a key is typed.
  */
-const IngredientRow = ({
+const IngredientFormRow = ({
   id,
   setState,
 }: {
@@ -351,7 +342,7 @@ export const RecipeForm: React.FC = (): React.ReactElement => {
       <section className="form-list">
         <h5 className="form-label">Ingredients</h5>
         {ingredientList.map((ingredient) => (
-          <IngredientRow
+          <IngredientFormRow
             id={ingredient.id}
             key={ingredient.id}
             setState={setIngredientList}
