@@ -1,1 +1,80 @@
 @use "../../colors";
+
+$side-padding: 35px;
+
+#recipe-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 15px $side-padding 15px $side-padding;
+}
+
+#recipe-title {
+    font-weight: 600;
+    font-size: 36px;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+#recipe-details {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
+.info-item {
+    font-style: italic;
+    font-weight: 600;
+    span {
+        font-style: normal;
+    }
+}
+
+#recipe-description {
+    border: 3px solid colors.$accent-blue;
+    padding: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    p {
+        margin-bottom: 2px;
+    }
+}
+
+#ingredients-instructions-toggle {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.toggle-item {
+    grid-row: 1 / 2;
+    text-align: center;
+    font-weight: 600;
+    font-size: 24px;
+    font-style: italic;
+    background-color: colors.$accent-blue;
+    // padding-top: 8px;
+    // padding-bottom: 12px;
+    padding: 5px;
+}
+
+#instructions {
+    grid-column-start: 1;
+    grid-column-end: 2;
+}
+
+#ingredients {
+    grid-column-start: 2;
+    grid-column-end: 3;
+}
+
+.selected {
+    background-color: colors.$dark-blue;
+    color: colors.$accent-blue;
+}
+
+.toggle-text {
+    padding-top: 4px;
+    padding-bottom: 8px;
+    transition: all 0.2s ease-in-out;
+}
