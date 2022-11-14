@@ -78,3 +78,43 @@ $side-padding: 35px;
     padding-bottom: 8px;
     transition: all 0.2s ease-in-out;
 }
+
+#loader-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+#instructions-ingredients-container {
+    margin-top: 15px;
+    padding-left: 15px;
+    padding-right: 5px;
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.list-row {
+    display: flex;
+    margin-bottom: 2px;
+    div {
+        margin-right: 7px;
+    }
+    .list-icon {
+        font-size: 12px;
+        font-weight: 300;
+        margin-top: 6px;
+    }
+    .list-number {
+        font-size: 18px;
+        font-weight: 300;
+    }
+}
+
+.divider {
+    border: 2px solid colors.$accent-blue;
+    margin-top: 6px;
+    margin-bottom: 3px;
+    // margin-left: 10px;
+    // margin-right: 10px;
+}
