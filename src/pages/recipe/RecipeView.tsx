@@ -87,18 +87,12 @@ export const RecipeView = (): React.ReactElement => {
                 </section>
                 <div id="ingredients-instructions-toggle">
                     <div id="instructions" className="toggle-item">
-                        <div
-                            className={instructionsClass}
-                            onClick={() => setToggle("instructions")}
-                        >
+                        <div className={instructionsClass} onClick={() => setToggle("instructions")} >
                             Instructions
                         </div>
                     </div>
                     <div id="ingredients" className="toggle-item">
-                        <div
-                            className={ingredientsClass}
-                            onClick={() => setToggle("ingredients")}
-                        >
+                        <div className={ingredientsClass} onClick={() => setToggle("ingredients")} >
                             Ingredients
                         </div>
                     </div>

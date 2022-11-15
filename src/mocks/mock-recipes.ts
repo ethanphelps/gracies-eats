@@ -33,12 +33,12 @@ export const recipes: Recipe[] = [
             { id: 3, name: 'turmeric', quantity: 1},
         ],
         instructions: [
-            { id: 0, description: 'preheat oven', prePrep: true },
-            { id: 1, description: 'start rice cooker', prePrep: true },
-            { id: 2, description: 'cut brussel sprouts', prePrep: false },
-            { id: 3, description: 'cook brussel sprouts in air fryer', prePrep: false },
-            { id: 4, description: 'bake cauliflower in the oven', prePrep: false },
-            { id: 5, description: 'plate it up', prePrep: false },
+            { id: 1, description: 'preheat oven', prePrep: true },
+            { id: 2, description: 'start rice cooker', prePrep: true },
+            { id: 3, description: 'cut brussel sprouts', prePrep: false },
+            { id: 4, description: 'cook brussel sprouts in air fryer', prePrep: false },
+            { id: 5, description: 'bake cauliflower in the oven', prePrep: false },
+            { id: 6, description: 'plate it up', prePrep: false },
         ]
     }
 ]
