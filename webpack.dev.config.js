@@ -1,5 +1,6 @@
 const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin')
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { DefinePlugin } = require('webpack');
 
 module.exports = {
   entry: {
@@ -28,6 +29,15 @@ module.exports = {
       template: "./src/index.html",
       favicon: "./public/favicon.ico"
     }),
+    // pass environment variables into build
+    new DefinePlugin({
+      process: {
+        env: {
+          ENV: JSON.stringify('local'),
+          TEST: JSON.stringify('test string')
+        }
+      }
+    })
   ],
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],

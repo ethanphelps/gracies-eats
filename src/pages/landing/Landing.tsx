@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./landing.scss";
 import { Add, Search } from "../../inline-svgs";
 import Link from "../../components/Link";
+import { Recipe } from "../../models/models";
 
 interface IconButtonProps {
   image: React.ReactElement;
@@ -83,6 +84,14 @@ export const Landing: React.FC = (): React.ReactElement => {
       time: "25 min",
     },
   ];
+
+  const [recipes, setRecipes] = useState<Recipe[]>([]);
+
+  useEffect(() => {
+    const fetchRecipes = async () => {
+      // const recipes = await fetch()
+    }
+  })
 
   return (
     <div className="landing-container">

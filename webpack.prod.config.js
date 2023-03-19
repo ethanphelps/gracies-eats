@@ -1,6 +1,7 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const { DefinePlugin } = require('webpack');
 
 module.exports = {
   entry: {
@@ -12,6 +13,13 @@ module.exports = {
     clean: true
   },
   mode: "production",
+  devServer: {
+    port: 8080,
+    historyApiFallback: true, // required for SPA routing. redirects 404s to index.html and lets it behave as if server-side rendered
+    static: {
+      directory: path.join(__dirname, "public"), // get assets from here on reload
+    },
+  },
   plugins: [
     new MiniCssExtractPlugin({
       filename: "[name].[contenthash].css",
@@ -20,6 +28,13 @@ module.exports = {
       template: "./src/index.html",
       favicon: "./public/favicon.ico"
     }),
+    new DefinePlugin({
+      process: {
+        env: {
+          ENV: JSON.stringify('prod'),
+        }
+      }
+    })
   ],
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
