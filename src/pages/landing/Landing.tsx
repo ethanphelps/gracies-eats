@@ -1,8 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Suspense } from "react";
 import "./landing.scss";
 import { Add, Search } from "../../inline-svgs";
 import Link from "../../components/Link";
 import { Recipe } from "../../models/models";
+import { getConfig } from "../../config";
+import { suspenseWrapper } from "../../utils/suspenseWrapper";
+
+const config = getConfig();
+const username = 'graciecate@me.com';
 
 interface IconButtonProps {
   image: React.ReactElement;
@@ -29,15 +34,15 @@ const Header = ({}): React.ReactElement => {
 }
 
 interface RecipeCardProps {
-  id?: number;
+  id?: string;
   src: string;
-  title: string;
+  name: string;
   time: string;
 }
 const RecipeCard = ({
   id,
   src,
-  title,
+  name,
   time,
 }: RecipeCardProps): React.ReactElement => {
   return (
@@ -45,7 +50,7 @@ const RecipeCard = ({
     <Link href={`recipe/${id.toString()}`}>
       <article className="recipe-card">
         <header className="card-header-bar">
-          <h3 className="title">{title}</h3>
+          <h3 className="title">{name}</h3>
           <h4 className="time">{time}</h4>
         </header>
         <main className="card-body">
@@ -60,50 +65,56 @@ const RecipeCard = ({
 export const Landing: React.FC = (): React.ReactElement => {
   const data: RecipeCardProps[] = [
     {
-      id: 0,
+      id: '0',
       src: "drunken_noodles.jpg",
-      title: "Drunken Noodles",
+      name: "Drunken Noodles",
       time: "1hr",
     },
     {
-      id: 1,
+      id: '1',
       src: "avocado_toast.jpeg",
-      title: "Avocado Toast",
+      name: "Avocado Toast",
       time: "10 min",
     },
     {
-      id: 2,
+      id: '2',
       src: "kale_salad.jpg",
-      title: "Kale Salad",
+      name: "Kale Salad",
       time: "25 min",
     },
     {
-      id: 3,
+      id: '3',
       src: "kale_salad.jpg",
-      title: "Kale Salad",
+      name: "Kale Salad",
       time: "25 min",
     },
   ];
 
   const [recipes, setRecipes] = useState<Recipe[]>([]);
+  // const [recipes, setRecipes] = useState<any[]>([]);
 
   useEffect(() => {
     const fetchRecipes = async () => {
-      // const recipes = await fetch()
+      const response = await fetch(`${config.API_URL}/users/${username}/recipes`)
+      const data = await response.json();
+      setRecipes(data);
     }
-  })
+    fetchRecipes();
+  }, []);
 
+  console.log('recipes retrieved:', recipes)
   return (
     <div className="landing-container">
       <Header />
       <div className="recipe-list">
-        {data.map((recipe) => (
+        {recipes.map((recipe, index) => (
           <RecipeCard
-            key={recipe.id}
+            key={index}
             id={recipe.id}
-            src={recipe.src}
-            title={recipe.title}
-            time={recipe.time}
+            // src={recipe.src}
+            src=''
+            name={recipe.name}
+            time={recipe.prepTime}
           />
         ))}
       </div>

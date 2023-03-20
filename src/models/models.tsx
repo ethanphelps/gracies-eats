@@ -7,10 +7,10 @@ export interface InstructionStep {
     id: number;
     description: string;
     prePrep: boolean;
-  }
+}
 export interface Recipe {
     id: string;
-    title: string;
+    name: string;
     prepTime: string;
     cookTime: string;
     description: string;

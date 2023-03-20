@@ -4,6 +4,11 @@ import { Ingredient, InstructionStep, Recipe } from "../../models/models";
 import "./recipe.scss";
 import { recipes } from "../../mocks/mock-recipes";
 import { PacmanLoader } from "react-spinners";
+import { getConfig } from "../../config";
+
+
+const config = getConfig();
+const username = 'graciecate@me.com';
 
 const spinnerCSS: CSSProperties = {
     top: "-30px",
@@ -46,17 +51,25 @@ export const RecipeView = (): React.ReactElement => {
     // make network call to get recipe data here
     useEffect(() => {
         const recipeId = routeContext.params.recipeId;
-        for(const recipe of recipes) {
-            if(recipe.id == recipeId) {
-                console.log(`Recipe ${recipeId} found!`)
-                // setRecipeData(recipe);
-                setTimeout(() => setRecipeData(recipe), 200)
-            }
+        // for(const recipe of recipes) {
+        //     if(recipe.id == recipeId) {
+        //         console.log(`Recipe ${recipeId} found!`)
+        //         // setRecipeData(recipe);
+        //         setTimeout(() => setRecipeData(recipe), 200)
+        //     }
+        // }
+        const fetchRecipe = async () => {
+            const response = await fetch(`${config.API_URL}/users/${username}/recipes/${recipeId}`);
+            const data = await response.json();
+            setRecipeData(data);
         }
-        if(!recipeData) {
-            console.log('Recipe not found!');
-        }
+        // if(!recipeData) {
+        //     console.log('Recipe not found!');
+        // }
+        fetchRecipe();
     }, []);
+
+    console.log('recipe data retrieved: ', recipeData);
 
     const instructionsClass = toggle === "instructions" ? "toggle-text selected" : "toggle-text";
     const ingredientsClass = toggle === "ingredients" ? "toggle-text selected" : "toggle-text";
@@ -70,7 +83,7 @@ export const RecipeView = (): React.ReactElement => {
     } else {
         return (
             <div id="recipe-container">
-                <header id="recipe-title">{recipeData.title}</header>
+                <header id="recipe-title">{recipeData.name}</header>
                 <section id="recipe-details">
                     <div className="info-item">
                         Serves: <span>{recipeData.serves}</span>
@@ -103,7 +116,7 @@ export const RecipeView = (): React.ReactElement => {
                         <div id="instructions" className="item-list">
                             {recipeData.instructions.map((instruction: InstructionStep, i: number) => (
                                 <>
-                                    <InstructionRow key={instruction.id} instruction={instruction}/>
+                                    <InstructionRow key={i} instruction={instruction}/>
                                     {i == recipeData.instructions.length - 1 ? null : <Divider />}
                                 </>
                             ))}
