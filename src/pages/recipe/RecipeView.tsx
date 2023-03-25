@@ -3,17 +3,13 @@ import { RouteContext } from "../../context";
 import { Ingredient, InstructionStep, Recipe } from "../../models/models";
 import "./recipe.scss";
 import { recipes } from "../../mocks/mock-recipes";
-import { PacmanLoader } from "react-spinners";
 import { getConfig } from "../../config";
+import { PacmanLoaderComponent } from "../../components/PacmanLoader";
 
 
 const config = getConfig();
 const username = 'graciecate@me.com';
 
-const spinnerCSS: CSSProperties = {
-    top: "-30px",
-    left: "-35px"
-}
 
 const IngredientRow = ({
     ingredient,
@@ -27,6 +23,7 @@ const IngredientRow = ({
         </section>
     );
 };
+
 const InstructionRow = ({
     instruction,
 }: {
@@ -75,11 +72,7 @@ export const RecipeView = (): React.ReactElement => {
     const ingredientsClass = toggle === "ingredients" ? "toggle-text selected" : "toggle-text";
 
     if(!recipeData) {
-        return (
-            <div id="loader-container">
-                <PacmanLoader size={30} color="#3b427d" cssOverride={spinnerCSS}></PacmanLoader>
-            </div>
-        );
+        return ( <PacmanLoaderComponent /> );
     } else {
         return (
             <div id="recipe-container">
