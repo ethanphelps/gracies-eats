@@ -3,6 +3,7 @@ import "./RecipeForm.scss";
 import { IconButton } from "../landing/landing";
 import { CreateRecipeResponse, Ingredient, InstructionStep } from "../../models/models";
 import { getConfig } from "../../config";
+import { RecipeLoaderComponent } from "../../components/RecipeLoader";
 
 const config = getConfig();
 
@@ -287,10 +288,12 @@ export const RecipeForm: React.FC = (): React.ReactElement => {
   const [serves, setServes] = useState(0);
   const [coverImage, setCoverImage] = useState<File | null>(null);
   const [coverImageName, setCoverImageName] = useState<string>("");
+  const [isLoading, setLoading] = useState<boolean>(false);
 
   // sends recipe to API and uploads image to S3 bucket
   const submitRecipe = async (event: React.MouseEvent) => {
     event.preventDefault();
+    setLoading(true);
     // console.log(event);
     const recipeData = {
       name: name,
@@ -303,7 +306,7 @@ export const RecipeForm: React.FC = (): React.ReactElement => {
     };
 
     console.log('Recipe form data: ', recipeData);
-    const user = 'kumquat.jones@example.com';
+    const user = 'graciecate@me.com';
     try {
       const response = await fetch(`${config.API_URL}/users/${user}/recipes`, {
         method: 'POST',
@@ -327,16 +330,23 @@ export const RecipeForm: React.FC = (): React.ReactElement => {
         body: formData
       });
       console.log(s3UploadResponse);
+      setLoading(false);
 
       // if successful, redirect user to the new recipe page using the recipeId
+      window.history.pushState({}, "", `recipe/${recipeResponse.recipeId.toString()}`) // update url
+      const navEvent = new PopStateEvent('popstate');
+      window.dispatchEvent(navEvent);
     } catch(e) {
       console.log('Error creating recipe: ', e);
       // set error state here that shows an error page asking them to submit the recipe again 
+      setLoading(false);
     }
   };
 
-  if(coverImage) {
-    console.log(`Cover image set: ${coverImageName}`);
+  if(isLoading) {
+    return (
+      <RecipeLoaderComponent />
+    )
   }
 
   return (

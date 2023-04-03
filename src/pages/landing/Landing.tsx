@@ -87,33 +87,6 @@ const RecipeList = ({ recipes }: { recipes: Recipe[] }): React.ReactElement => {
 
 
 export const Landing: React.FC = (): React.ReactElement => {
-    // const data: RecipeCardProps[] = [
-    //   {
-    //     id: '0',
-    //     src: "drunken_noodles.jpg",
-    //     name: "Drunken Noodles",
-    //     time: "1hr",
-    //   },
-    //   {
-    //     id: '1',
-    //     src: "avocado_toast.jpeg",
-    //     name: "Avocado Toast",
-    //     time: "10 min",
-    //   },
-    //   {
-    //     id: '2',
-    //     src: "kale_salad.jpg",
-    //     name: "Kale Salad",
-    //     time: "25 min",
-    //   },
-    //   {
-    //     id: '3',
-    //     src: "kale_salad.jpg",
-    //     name: "Kale Salad",
-    //     time: "25 min",
-    //   },
-    // ];
-
     const [recipes, setRecipes] = useState<Recipe[] | null>(null);
 
     useEffect(() => {
