@@ -1,7 +1,10 @@
 import React, { useState, useRef } from "react";
 import "./RecipeForm.scss";
 import { IconButton } from "../landing/landing";
-import { Ingredient, InstructionStep } from "../../models/models";
+import { CreateRecipeResponse, Ingredient, InstructionStep } from "../../models/models";
+import { getConfig } from "../../config";
+
+const config = getConfig();
 
 interface FormInputProps {
   title?: string;
@@ -122,6 +125,7 @@ const CheckBox = ({
   );
 };
 
+
 /**
  * Custom File Input component that overrides the difficult-to-style input type="file" element.
  * This is achieved by setting the default input element's visibility to hidden and width to zero
@@ -129,7 +133,12 @@ const CheckBox = ({
  * The file name is displayed using an onChange handler on the input element that sets the button's
  * text to name of the chosen file.
  */
-const FileInput = ({ text }: { text: string }): React.ReactElement => {
+interface FileInputProps {
+  text: string,
+  setFile: (file: any) => void,
+  setFileName: (fileName: string) => void
+}
+const FileInput = ({ text, setFile, setFileName }: FileInputProps): React.ReactElement => {
   const ref = useRef(null);
   const [buttonText, setButtonText] = useState(text);
   const click = (event: React.MouseEvent) => {
@@ -139,6 +148,9 @@ const FileInput = ({ text }: { text: string }): React.ReactElement => {
   };
   const fileChosen = (event: React.ChangeEvent<HTMLInputElement>) => {
     const fileName = event.target.value.split("\\").at(-1);
+    const file = event.target.files[0];
+    setFile(file);
+    setFileName(fileName);
     setButtonText(fileName);
   };
   return (
@@ -260,6 +272,7 @@ const InstructionRow = ({
   );
 };
 
+
 export const RecipeForm: React.FC = (): React.ReactElement => {
   const [ingredientList, setIngredientList] = useState<Ingredient[]>([
     { id: 0, name: "", quantity: 0 },
@@ -272,12 +285,14 @@ export const RecipeForm: React.FC = (): React.ReactElement => {
   const [cookTime, setCookTime] = useState("");
   const [description, setDescription] = useState("");
   const [serves, setServes] = useState(0);
-  const [coverImage, setCoverImage] = useState("");
+  const [coverImage, setCoverImage] = useState<File | null>(null);
+  const [coverImageName, setCoverImageName] = useState<string>("");
 
-  const submitRecipe = (event: React.MouseEvent) => {
+  // sends recipe to API and uploads image to S3 bucket
+  const submitRecipe = async (event: React.MouseEvent) => {
     event.preventDefault();
     // console.log(event);
-    const recipe = {
+    const recipeData = {
       name: name,
       prepTime: prepTime,
       cookTime: cookTime,
@@ -285,10 +300,44 @@ export const RecipeForm: React.FC = (): React.ReactElement => {
       serves: serves,
       ingredients: ingredientList,
       instructions: instructionList,
-      coverImage,
     };
-    console.log(recipe);
+
+    console.log('Recipe form data: ', recipeData);
+    const user = 'kumquat.jones@example.com';
+    try {
+      const response = await fetch(`${config.API_URL}/users/${user}/recipes`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(recipeData),
+      })
+      const recipeResponse = await response.json() as CreateRecipeResponse;
+      
+      // upload recipe image to S3 using pre-signed url from create recipe response
+      const presignedUrlData = recipeResponse['presignedUrlData'];
+      const formData = new FormData();
+      for(const key of Object.keys(presignedUrlData.fields)) {
+        formData.append(key, presignedUrlData.fields[key]);
+      }
+      formData.append('file', coverImage);
+
+      const s3UploadResponse = await fetch(presignedUrlData.url, {
+        method: 'POST',
+        body: formData
+      });
+      console.log(s3UploadResponse);
+
+      // if successful, redirect user to the new recipe page using the recipeId
+    } catch(e) {
+      console.log('Error creating recipe: ', e);
+      // set error state here that shows an error page asking them to submit the recipe again 
+    }
   };
+
+  if(coverImage) {
+    console.log(`Cover image set: ${coverImageName}`);
+  }
 
   return (
     <form id="recipe-form">
@@ -385,7 +434,7 @@ export const RecipeForm: React.FC = (): React.ReactElement => {
         />
       </section>
 
-      <FileInput text="+ Upload Image" />
+      <FileInput text="+ Upload Image" setFile={setCoverImage} setFileName={setCoverImageName}/>
 
       <section className="form-row" id="submit-row">
         <button id="recipe-submit" onClick={submitRecipe}>

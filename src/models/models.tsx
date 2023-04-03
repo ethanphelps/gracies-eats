@@ -1,3 +1,5 @@
+import React from "react";
+
 export interface Ingredient {
     id: number;
     name: string;
@@ -17,4 +19,25 @@ export interface Recipe {
     serves: number;
     ingredients: Ingredient[];
     instructions: InstructionStep[];
+    src?: string;
+}
+
+export interface NetworkError {
+    status: number;
+    message: string;
+}
+
+export interface CreateRecipeResponse {
+    message: string;
+    recipeId: string;
+    presignedUrlData: PresignedUrlData
+}
+
+export interface PresignedUrlData {
+    url: string;
+    fields: PresignedUrlFields
+}
+
+interface PresignedUrlFields {
+    [key: string]: string
 }

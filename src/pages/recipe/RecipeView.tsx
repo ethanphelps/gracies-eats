@@ -1,10 +1,11 @@
 import React, { useContext, useEffect, useState, CSSProperties } from "react";
 import { RouteContext } from "../../context";
-import { Ingredient, InstructionStep, Recipe } from "../../models/models";
+import { Ingredient, InstructionStep, NetworkError, Recipe } from "../../models/models";
 import "./recipe.scss";
 import { recipes } from "../../mocks/mock-recipes";
 import { getConfig } from "../../config";
 import { PacmanLoaderComponent } from "../../components/PacmanLoader";
+import { ErrorComponent } from "../../components/Error";
 
 
 const config = getConfig();
@@ -24,6 +25,7 @@ const IngredientRow = ({
     );
 };
 
+
 const InstructionRow = ({
     instruction,
 }: {
@@ -37,6 +39,7 @@ const InstructionRow = ({
     );
 };
 
+
 const Divider = (): React.ReactElement => <div className="divider"></div>
 
 
@@ -44,6 +47,7 @@ export const RecipeView = (): React.ReactElement => {
     const routeContext = useContext(RouteContext);
     const [toggle, setToggle] = useState("instructions");
     const [recipeData, setRecipeData] = useState<Recipe | null>(null);
+    const [error, setError] = useState<NetworkError | null>(null);
 
     // make network call to get recipe data here
     useEffect(() => {
@@ -56,13 +60,36 @@ export const RecipeView = (): React.ReactElement => {
         //     }
         // }
         const fetchRecipe = async () => {
-            const response = await fetch(`${config.API_URL}/users/${username}/recipes/${recipeId}`);
-            const data = await response.json();
-            setRecipeData(data);
+            try {
+                const response = await fetch(`${config.API_URL}/users/${username}/recipes/${recipeId}`);
+                console.log(response);
+                if (response.status >= 300) {
+                    switch (response.status) {
+                        case 404:
+                            setError({
+                                status: response.status,
+                                message: "Sorry, we couldn't find that recipe! Please try clicking the recipe again :)"
+                            })
+                            break;
+                        default:
+                            setError({
+                                status: response.status,
+                                message: response.statusText
+                            })
+                            break;
+                    }
+                } else {
+                    const data = await response.json();
+                    setRecipeData(data);
+                }
+            } catch(e) {
+                console.log(e);
+                setError({
+                    status: 500,
+                    message: "We're having trouble fetching your recipes right now :( Please try again later and let Ethan know!"
+                })
+            }
         }
-        // if(!recipeData) {
-        //     console.log('Recipe not found!');
-        // }
         fetchRecipe();
     }, []);
 
@@ -71,8 +98,12 @@ export const RecipeView = (): React.ReactElement => {
     const instructionsClass = toggle === "instructions" ? "toggle-text selected" : "toggle-text";
     const ingredientsClass = toggle === "ingredients" ? "toggle-text selected" : "toggle-text";
 
-    if(!recipeData) {
-        return ( <PacmanLoaderComponent /> );
+    if (error) {
+        return (
+            <ErrorComponent error={error}></ErrorComponent>
+        )
+    } else if (!recipeData) {
+        return (<PacmanLoaderComponent />);
     } else {
         return (
             <div id="recipe-container">
@@ -89,7 +120,7 @@ export const RecipeView = (): React.ReactElement => {
                     </div>
                 </section>
                 <section id="recipe-description">
-                    <p> { recipeData.description } </p>
+                    <p> {recipeData.description} </p>
                 </section>
                 <div id="ingredients-instructions-toggle">
                     <div id="instructions" className="toggle-item">
@@ -105,20 +136,20 @@ export const RecipeView = (): React.ReactElement => {
                 </div>
 
                 <section id="instructions-ingredients-container">
-                    {toggle === "instructions" ? 
+                    {toggle === "instructions" ?
                         <div id="instructions" className="item-list">
                             {recipeData.instructions.map((instruction: InstructionStep, i: number) => (
                                 <>
-                                    <InstructionRow key={i} instruction={instruction}/>
+                                    <InstructionRow key={i} instruction={instruction} />
                                     {i == recipeData.instructions.length - 1 ? null : <Divider />}
                                 </>
                             ))}
                         </div>
-                    :
+                        :
                         <div id="ingredients" className="item-list">
                             {recipeData.ingredients.map((ingredient: Ingredient, i: number) => (
                                 <>
-                                    <IngredientRow key={ingredient.id} ingredient={ingredient}/>
+                                    <IngredientRow key={ingredient.id} ingredient={ingredient} />
                                     {i == recipeData.ingredients.length - 1 ? null : <Divider />}
                                 </>
                             ))}
