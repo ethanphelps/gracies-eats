@@ -22,3 +22,11 @@ export const Search = (): React.ReactElement => {
     </svg>
   )
 }
+
+export const Back = (): React.ReactElement => {
+  return (
+    <svg width="15" height="26" viewBox="0 0 15 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M13.0519 2L2 13.0519L13.0519 24.1039" stroke="#F5F9FF" stroke-width="2.20276" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  )
+}

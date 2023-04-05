@@ -6,6 +6,8 @@ import { recipes } from "../../mocks/mock-recipes";
 import { getConfig } from "../../config";
 import { PacmanLoaderComponent } from "../../components/PacmanLoader";
 import { ErrorComponent } from "../../components/Error";
+import { IconButton } from "../landing/landing";
+import { Back } from "../../inline-svgs";
 
 
 const config = getConfig();
@@ -107,7 +109,12 @@ export const RecipeView = (): React.ReactElement => {
     } else {
         return (
             <div id="recipe-container">
-                <header id="recipe-title">{recipeData.name}</header>
+                <header id="recipe-title">
+                    <div id="back-container">
+                        <IconButton image={<Back/>} path="/"/>
+                    </div>
+                    {recipeData.name}
+                </header>
                 <section id="recipe-details">
                     <div className="info-item">
                         Serves: <span>{recipeData.serves}</span>

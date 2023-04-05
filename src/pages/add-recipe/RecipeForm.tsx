@@ -4,6 +4,7 @@ import { IconButton } from "../landing/landing";
 import { CreateRecipeResponse, Ingredient, InstructionStep } from "../../models/models";
 import { getConfig } from "../../config";
 import { RecipeLoaderComponent } from "../../components/RecipeLoader";
+import { Back } from "../../inline-svgs";
 
 const config = getConfig();
 
@@ -351,7 +352,12 @@ export const RecipeForm: React.FC = (): React.ReactElement => {
 
   return (
     <form id="recipe-form">
-      <header id="form-title">Create a New Recipe</header>
+      <header id="form-title">
+        <div id="back-container-new-recipe">
+          <IconButton image={<Back/>} path="/"/>
+        </div>
+        Create a New Recipe
+      </header>
       <section className="form-row">
         <FormInput
           title="Title"
