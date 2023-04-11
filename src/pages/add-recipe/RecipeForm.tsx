@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 import "./RecipeForm.scss";
-import { IconButton } from "../landing/landing";
+import { IconButton } from "../landing/Landing";
 import { CreateRecipeResponse, Ingredient, InstructionStep } from "../../models/models";
 import { getConfig } from "../../config";
 import { RecipeLoaderComponent } from "../../components/RecipeLoader";

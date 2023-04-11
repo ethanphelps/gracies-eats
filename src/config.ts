@@ -17,7 +17,8 @@ const Base = {
 
 const Local = {
     ...Base,
-    API_URL: "http://localhost:3000",
+    // API_URL: "http://localhost:3000",
+    API_URL: "https://gnf3cr3vul.execute-api.us-east-1.amazonaws.com/Prod",
 };
 
 const QA = {

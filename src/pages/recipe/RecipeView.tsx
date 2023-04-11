@@ -6,7 +6,7 @@ import { recipes } from "../../mocks/mock-recipes";
 import { getConfig } from "../../config";
 import { PacmanLoaderComponent } from "../../components/PacmanLoader";
 import { ErrorComponent } from "../../components/Error";
-import { IconButton } from "../landing/landing";
+import { IconButton } from "../landing/Landing";
 import { Back } from "../../inline-svgs";
 
 
