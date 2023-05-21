@@ -89,6 +89,8 @@ const RecipeList = ({ recipes }: { recipes: Recipe[] }): React.ReactElement => {
 export const Landing: React.FC = (): React.ReactElement => {
     const [recipes, setRecipes] = useState<Recipe[] | null>(null);
 
+    console.log(window.location);
+
     useEffect(() => {
         const fetchRecipes = async () => {
             const response = await fetch(
